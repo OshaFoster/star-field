@@ -30,8 +30,8 @@ function generateStarPath(numPoints, outerR, innerR) {
 }
 
 /**
- * Star — An individual pointed star shape that drifts upward into
- * a fixed viewport position, driven by scroll progress.
+ * Star — Fades in from nothing with a gentle scale bloom,
+ * driven by scroll progress. No sliding — just a quiet appearance.
  */
 export default function Star({
   scrollProgress,
@@ -49,19 +49,23 @@ export default function Star({
   const starPath = generateStarPath(points, size, innerR);
   const viewBoxSize = size * 2;
 
-  // Linear drift upward from 300px below — constant speed, no snap
-  const yOffset = useTransform(scrollProgress, (v) => {
-    if (v <= enterStart) return 300;
-    if (v >= enterEnd) return 0;
-    const t = (v - enterStart) / (enterEnd - enterStart);
-    return 300 * (1 - t);
-  });
+  // Smooth sinusoidal ease — gentle ramp in, gentle ramp out
+  const ease = (t) => t - Math.sin(t * Math.PI * 2) / (Math.PI * 2);
 
-  // Slow, even fade across the full entrance duration
+  // Fade from invisible to muted gray
   const opacity = useTransform(scrollProgress, (v) => {
     if (v <= enterStart) return 0;
     if (v >= enterEnd) return 1;
-    return (v - enterStart) / (enterEnd - enterStart);
+    const t = (v - enterStart) / (enterEnd - enterStart);
+    return ease(t);
+  });
+
+  // Gentle scale bloom — starts slightly small, eases to full size
+  const scale = useTransform(scrollProgress, (v) => {
+    if (v <= enterStart) return 0.6;
+    if (v >= enterEnd) return 1;
+    const t = (v - enterStart) / (enterEnd - enterStart);
+    return 0.6 + 0.4 * ease(t);
   });
 
   return (
@@ -74,7 +78,13 @@ export default function Star({
         marginTop: -size,
       }}
     >
-      <motion.div style={{ y: yOffset, opacity }}>
+      <motion.div
+        style={{
+          opacity,
+          scale,
+          filter: "drop-shadow(0 0 3px rgba(255,255,255,0.15))",
+        }}
+      >
         <svg
           width={viewBoxSize}
           height={viewBoxSize}
@@ -84,8 +94,8 @@ export default function Star({
         >
           <path
             d={starPath}
-            stroke="white"
-            strokeWidth="1.5"
+            stroke="rgb(140, 140, 140)"
+            strokeWidth="1"
             strokeLinejoin="round"
             fill="none"
           />

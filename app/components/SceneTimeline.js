@@ -19,19 +19,19 @@ import Star from "./Star";
  *   Stage 3 (scroll 0.50–0.80): Second wave — completes the field
  */
 const STARS = [
-  // Each star enters one at a time — 5% of scroll each, no overlap.
-  // Scroll 0.20–0.75 covers all 11 entrances, leaving 0.75–1.0 for ambient.
-  { x: 5,  y: 8,  size: 20, points: 4, enterRange: [0.20, 0.25] },
-  { x: 92, y: 25, size: 28, points: 4, enterRange: [0.25, 0.30] },
-  { x: 8,  y: 50, size: 16, points: 5, enterRange: [0.30, 0.35] },
-  { x: 70, y: 6,  size: 24, points: 4, enterRange: [0.35, 0.40] },
-  { x: 35, y: 88, size: 18, points: 5, enterRange: [0.40, 0.45] },
-  { x: 50, y: 42, size: 34, points: 4, enterRange: [0.45, 0.50] },
-  { x: 93, y: 72, size: 14, points: 5, enterRange: [0.50, 0.55] },
-  { x: 28, y: 5,  size: 20, points: 4, enterRange: [0.55, 0.60] },
-  { x: 88, y: 90, size: 22, points: 5, enterRange: [0.60, 0.65] },
-  { x: 4,  y: 82, size: 12, points: 4, enterRange: [0.65, 0.70] },
-  { x: 62, y: 65, size: 18, points: 5, enterRange: [0.70, 0.75] },
+  // Each star enters one at a time — 7% of scroll each, no overlap.
+  // Scroll 0.15–0.92 covers all 11 entrances, leaving 0.92–1.0 for rest.
+  { x: 5,  y: 8,  size: 10, points: 5, enterRange: [0.15, 0.22] },
+  { x: 92, y: 25, size: 14, points: 5, enterRange: [0.22, 0.29] },
+  { x: 8,  y: 50, size: 8,  points: 5, enterRange: [0.29, 0.36] },
+  { x: 70, y: 6,  size: 12, points: 4, enterRange: [0.36, 0.43] },
+  { x: 35, y: 88, size: 10, points: 5, enterRange: [0.43, 0.50] },
+  { x: 50, y: 42, size: 18, points: 5, enterRange: [0.50, 0.57] },
+  { x: 93, y: 72, size: 7,  points: 5, enterRange: [0.57, 0.64] },
+  { x: 28, y: 5,  size: 11, points: 4, enterRange: [0.64, 0.71] },
+  { x: 88, y: 90, size: 13, points: 5, enterRange: [0.71, 0.78] },
+  { x: 4,  y: 82, size: 6,  points: 4, enterRange: [0.78, 0.85] },
+  { x: 62, y: 65, size: 9,  points: 5, enterRange: [0.85, 0.92] },
 ];
 
 /**
@@ -79,7 +79,7 @@ export default function SceneTimeline() {
       </div>
 
       {/* Scroll-height spacer — provides 500vh of room for the timeline */}
-      <div className="h-[900vh]" aria-hidden="true" />
+      <div className="h-[1200vh]" aria-hidden="true" />
     </>
   );
 }
