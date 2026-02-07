@@ -4,34 +4,32 @@ import { useEffect } from "react";
 import { useScroll } from "framer-motion";
 import ArrowIndicator from "./ArrowIndicator";
 import Star from "./Star";
+import Moon from "./Moon";
 
 /**
- * Star field composition data.
+ * Star field composition data — ordered by depth layer.
  *
- * Each entry defines a star's final viewport position (x%, y%),
- * visual size (outer radius in px), point count, and the scroll
- * range [start, end] that controls its entrance animation.
+ * Fewer, larger, outline-only stars for a graphic look.
  *
- * Positions are hand-placed for a balanced, intentional composition —
- * no randomness. Stars are grouped into two waves:
- *
- *   Stage 2 (scroll 0.20–0.50): First wave — sparse arrangement
- *   Stage 3 (scroll 0.50–0.80): Second wave — completes the field
+ *   Background (3 stars): scroll 0.20–0.40, sizes 10–14px
+ *   Midground  (3 stars): scroll 0.40–0.62, sizes 16–20px
+ *   Foreground (3 stars): scroll 0.62–0.92, sizes 22–28px
  */
 const STARS = [
-  // Each star enters one at a time — 7% of scroll each, no overlap.
-  // Scroll 0.15–0.92 covers all 11 entrances, leaving 0.92–1.0 for rest.
-  { x: 5,  y: 8,  size: 10, points: 5, enterRange: [0.15, 0.22] },
-  { x: 92, y: 25, size: 14, points: 5, enterRange: [0.22, 0.29] },
-  { x: 8,  y: 50, size: 8,  points: 5, enterRange: [0.29, 0.36] },
-  { x: 70, y: 6,  size: 12, points: 4, enterRange: [0.36, 0.43] },
-  { x: 35, y: 88, size: 10, points: 5, enterRange: [0.43, 0.50] },
-  { x: 50, y: 42, size: 18, points: 5, enterRange: [0.50, 0.57] },
-  { x: 93, y: 72, size: 7,  points: 5, enterRange: [0.57, 0.64] },
-  { x: 28, y: 5,  size: 11, points: 4, enterRange: [0.64, 0.71] },
-  { x: 88, y: 90, size: 13, points: 5, enterRange: [0.71, 0.78] },
-  { x: 4,  y: 82, size: 6,  points: 4, enterRange: [0.78, 0.85] },
-  { x: 62, y: 65, size: 9,  points: 5, enterRange: [0.85, 0.92] },
+  // — Background layer (first star starts at 0.18, arrow mostly gone) —
+  { x: 15, y: 68, size: 12, layer: "bg", enterRange: [0.180, 0.230] },
+  { x: 75, y: 20, size: 10, layer: "bg", enterRange: [0.230, 0.280] },
+  { x: 42, y: 35, size: 14, layer: "bg", enterRange: [0.280, 0.340] },
+
+  // — Midground layer —
+  { x: 88, y: 55, size: 18, layer: "mid", enterRange: [0.340, 0.410] },
+  { x: 8,  y: 15, size: 16, layer: "mid", enterRange: [0.410, 0.480] },
+  { x: 55, y: 78, size: 20, layer: "mid", enterRange: [0.480, 0.560] },
+
+  // — Foreground layer (slower entrance) —
+  { x: 92, y: 25, size: 24, layer: "fg", enterRange: [0.560, 0.680] },
+  { x: 28, y: 85, size: 22, layer: "fg", enterRange: [0.680, 0.800] },
+  { x: 62, y: 45, size: 28, layer: "fg", enterRange: [0.800, 0.920] },
 ];
 
 /**
@@ -63,7 +61,7 @@ export default function SceneTimeline() {
         {/* Stage 1: Arrow draws in, pulses, then fades */}
         <ArrowIndicator scrollProgress={scrollYProgress} />
 
-        {/* Stages 2–4: Stars enter and settle into the field */}
+        {/* Stars fade in one at a time */}
         {STARS.map((star, i) => (
           <Star
             key={i}
@@ -71,15 +69,18 @@ export default function SceneTimeline() {
             x={star.x}
             y={star.y}
             size={star.size}
-            points={star.points}
             enterRange={star.enterRange}
+            layer={star.layer}
             index={i}
           />
         ))}
+
+        {/* Moon rises after all stars have settled */}
+        <Moon scrollProgress={scrollYProgress} />
       </div>
 
       {/* Scroll-height spacer — provides 500vh of room for the timeline */}
-      <div className="h-[1200vh]" aria-hidden="true" />
+      <div className="h-[1500vh]" aria-hidden="true" />
     </>
   );
 }
