@@ -5,6 +5,7 @@ import { useScroll } from "framer-motion";
 import ArrowIndicator from "./ArrowIndicator";
 import Star from "./Star";
 import Moon from "./Moon";
+import Cloud from "./Cloud";
 
 /**
  * Star field composition data — ordered by depth layer.
@@ -77,6 +78,9 @@ export default function SceneTimeline() {
 
         {/* Moon rises after all stars have settled */}
         <Moon scrollProgress={scrollYProgress} />
+
+        {/* Cloud slides in from the right after the moon */}
+        <Cloud scrollProgress={scrollYProgress} />
       </div>
 
       {/* Scroll-height spacer — provides 500vh of room for the timeline */}
