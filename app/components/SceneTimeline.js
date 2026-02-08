@@ -17,20 +17,20 @@ import Cloud from "./Cloud";
  *   Foreground (3 stars): scroll 0.62–0.92, sizes 22–28px
  */
 const STARS = [
-  // — Background layer (first star starts at 0.18, arrow mostly gone) —
-  { x: 15, y: 68, size: 12, layer: "bg", enterRange: [0.180, 0.230] },
-  { x: 75, y: 20, size: 10, layer: "bg", enterRange: [0.230, 0.280] },
-  { x: 42, y: 35, size: 14, layer: "bg", enterRange: [0.280, 0.340] },
+  // — Background layer —
+  { x: 15, y: 68, size: 12, layer: "bg", enterRange: [0.12, 0.15] },
+  { x: 75, y: 20, size: 10, layer: "bg", enterRange: [0.15, 0.18] },
+  { x: 42, y: 35, size: 14, layer: "bg", enterRange: [0.18, 0.22] },
 
   // — Midground layer —
-  { x: 88, y: 55, size: 18, layer: "mid", enterRange: [0.340, 0.410] },
-  { x: 8,  y: 15, size: 16, layer: "mid", enterRange: [0.410, 0.480] },
-  { x: 55, y: 78, size: 20, layer: "mid", enterRange: [0.480, 0.560] },
+  { x: 88, y: 55, size: 18, layer: "mid", enterRange: [0.22, 0.27] },
+  { x: 8,  y: 15, size: 16, layer: "mid", enterRange: [0.27, 0.31] },
+  { x: 55, y: 78, size: 20, layer: "mid", enterRange: [0.31, 0.37] },
 
   // — Foreground layer (slower entrance) —
-  { x: 92, y: 25, size: 24, layer: "fg", enterRange: [0.560, 0.680] },
-  { x: 28, y: 85, size: 22, layer: "fg", enterRange: [0.680, 0.800] },
-  { x: 62, y: 45, size: 28, layer: "fg", enterRange: [0.800, 0.920] },
+  { x: 92, y: 25, size: 24, layer: "fg", enterRange: [0.37, 0.45] },
+  { x: 28, y: 85, size: 22, layer: "fg", enterRange: [0.45, 0.52] },
+  { x: 62, y: 45, size: 28, layer: "fg", enterRange: [0.52, 0.60] },
 ];
 
 /**
@@ -84,7 +84,7 @@ export default function SceneTimeline() {
       </div>
 
       {/* Scroll-height spacer — provides 500vh of room for the timeline */}
-      <div className="h-[1500vh]" aria-hidden="true" />
+      <div className="h-[3000vh]" aria-hidden="true" />
     </>
   );
 }

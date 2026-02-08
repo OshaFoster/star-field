@@ -9,31 +9,33 @@ import { motion, useTransform } from "framer-motion";
 export default function Cloud({ scrollProgress }) {
   const ease = (t) => t - Math.sin(t * Math.PI * 2) / (Math.PI * 2);
 
-  // Slide in from right (starts off-screen, ends at resting position)
+  // Slide from off-screen right all the way to off-screen left (0.62–0.95)
+  const startX = 1400;   // off-screen right
+  const endX = -2400;    // off-screen left
   const xOffset = useTransform(scrollProgress, (v) => {
-    if (v <= 0.88) return 400;
-    if (v >= 1.0) return 0;
-    const t = (v - 0.88) / 0.12;
-    return 400 * (1 - ease(t));
+    if (v <= 0.62) return startX;
+    if (v >= 0.95) return endX;
+    const t = (v - 0.62) / 0.33;
+    return startX + (endX - startX) * ease(t);
   });
 
-  // Fade in only the stroke so black fill stays opaque
+  // Stroke fades in quickly at the start
   const strokeOpacity = useTransform(scrollProgress, (v) => {
-    if (v <= 0.88) return 0;
-    if (v >= 1.0) return 1;
-    const t = (v - 0.88) / 0.12;
+    if (v <= 0.62) return 0;
+    if (v >= 0.67) return 1;
+    const t = (v - 0.62) / 0.05;
     return ease(t);
   });
 
-  const width = 320;
-  const height = 140;
+  const width = 110;  // vw — full screen plus extra for slide-in
+  const height = 170;
 
   return (
     <div
       className="fixed pointer-events-none z-20"
       style={{
-        right: "8%",
-        top: "55%",
+        right: "-10%",
+        top: "38%",
         marginTop: -height / 2,
       }}
     >
@@ -43,28 +45,31 @@ export default function Cloud({ scrollProgress }) {
         }}
       >
         <svg
-          width={width}
+          width={`${width}vw`}
           height={height}
-          viewBox="0 0 260 100"
+          viewBox="0 0 380 140"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
         >
           <motion.path
             d={[
-              "M 10 68",
-              "Q -2 52 14 40",
-              "Q 10 22 36 16",
-              "Q 62 10 78 28",
-              "Q 88 6 118 14",
-              "Q 145 20 148 38",
-              "Q 168 22 190 28",
-              "Q 208 36 210 52",
-              "Q 222 50 232 62",
-              "Q 238 74 220 82",
-              "Q 200 90 168 84",
-              "Q 130 92 98 86",
-              "Q 55 90 35 80",
-              "Q 18 74 10 68",
+              "M 12 95",
+              "C -2 80 0 65 16 58",
+              "C 28 34 48 20 68 16",
+              "C 88 12 98 24 108 18",
+              "C 125 10 138 6 155 14",
+              "Q 172 6 195 12",
+              "C 210 8 228 4 242 14",
+              "C 258 22 268 32 280 30",
+              "C 298 26 318 34 338 42",
+              "C 355 50 368 58 375 68",
+              "C 382 78 388 86 386 94",
+              "C 384 104 374 110 362 112",
+              "Q 335 118 305 114",
+              "Q 245 124 205 118",
+              "Q 160 126 120 118",
+              "Q 75 124 48 112",
+              "Q 22 104 12 95",
             ].join(" ")}
             stroke="rgb(190, 190, 190)"
             strokeWidth="1"

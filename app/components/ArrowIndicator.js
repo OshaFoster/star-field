@@ -42,7 +42,7 @@ export default function ArrowIndicator({ scrollProgress }) {
   }, [shaftLength, headLeftLength, headRightLength]);
 
   // Scrolling pushes the arrow off the bottom of the viewport
-  const yPosition = useTransform(scrollProgress, [0, 0.20, 1], [0, 800, 800]);
+  const yPosition = useTransform(scrollProgress, [0, 0.13, 1], [0, 800, 800]);
 
   return (
     <motion.div
