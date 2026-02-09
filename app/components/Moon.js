@@ -10,19 +10,19 @@ export default function Moon({ scrollProgress }) {
   // Smooth sinusoidal ease — matches star easing
   const ease = (t) => t - Math.sin(t * Math.PI * 2) / (Math.PI * 2);
 
-  // Slow rise (0.45–0.60)
+  // Slow rise after all stars have entered (0.21–0.27)
   const yOffset = useTransform(scrollProgress, (v) => {
-    if (v <= 0.45) return 600;
-    if (v >= 0.60) return 0;
-    const t = (v - 0.45) / 0.15;
+    if (v <= 0.19) return 600;
+    if (v >= 0.25) return 0;
+    const t = (v - 0.19) / 0.06;
     return 600 * (1 - ease(t));
   });
 
   // Fade in only the stroke (not the whole element, so black fill stays opaque)
   const strokeOpacity = useTransform(scrollProgress, (v) => {
-    if (v <= 0.45) return 0;
-    if (v >= 0.60) return 1;
-    const t = (v - 0.45) / 0.15;
+    if (v <= 0.19) return 0;
+    if (v >= 0.25) return 1;
+    const t = (v - 0.19) / 0.06;
     return ease(t);
   });
 

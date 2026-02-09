@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { useScroll } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 import ArrowIndicator from "./ArrowIndicator";
 import Star from "./Star";
 import Moon from "./Moon";
@@ -18,19 +18,19 @@ import Cloud from "./Cloud";
  */
 const STARS = [
   // — Background layer —
-  { x: 15, y: 68, size: 12, layer: "bg", enterRange: [0.12, 0.15] },
-  { x: 75, y: 20, size: 10, layer: "bg", enterRange: [0.15, 0.18] },
-  { x: 42, y: 35, size: 14, layer: "bg", enterRange: [0.18, 0.22] },
+  { x: 15, y: 68, size: 12, layer: "bg", enterRange: [0.05, 0.065] },
+  { x: 75, y: 20, size: 10, layer: "bg", enterRange: [0.065, 0.08] },
+  { x: 42, y: 35, size: 14, layer: "bg", enterRange: [0.08, 0.095] },
 
   // — Midground layer —
-  { x: 88, y: 55, size: 18, layer: "mid", enterRange: [0.22, 0.27] },
-  { x: 8,  y: 15, size: 16, layer: "mid", enterRange: [0.27, 0.31] },
-  { x: 55, y: 78, size: 20, layer: "mid", enterRange: [0.31, 0.37] },
+  { x: 88, y: 55, size: 18, layer: "mid", enterRange: [0.095, 0.115] },
+  { x: 8,  y: 15, size: 16, layer: "mid", enterRange: [0.115, 0.135] },
+  { x: 55, y: 78, size: 20, layer: "mid", enterRange: [0.135, 0.155] },
 
-  // — Foreground layer (slower entrance) —
-  { x: 92, y: 25, size: 24, layer: "fg", enterRange: [0.37, 0.45] },
-  { x: 28, y: 85, size: 22, layer: "fg", enterRange: [0.45, 0.52] },
-  { x: 62, y: 45, size: 28, layer: "fg", enterRange: [0.52, 0.60] },
+  // — Foreground layer (last star enters after moon rises at 0.21–0.27) —
+  { x: 92, y: 25, size: 24, layer: "fg", enterRange: [0.155, 0.18] },
+  { x: 28, y: 85, size: 22, layer: "fg", enterRange: [0.18, 0.20] },
+  { x: 62, y: 45, size: 28, layer: "fg", enterRange: [0.27, 0.29] },
 ];
 
 /**
@@ -55,36 +55,55 @@ export default function SceneTimeline() {
   // Single scroll progress value drives the entire timeline
   const { scrollYProgress } = useScroll();
 
+  // Night-to-day background transition — starts subtly as cloud exits
+  const bgColor = useTransform(
+    scrollYProgress,
+    [0, 0.51, 0.58],
+    ["rgb(0,0,0)", "rgb(0,0,0)", "rgb(30,50,80)"]
+  );
+
+  // Stars begin to fade as the sky hints at changing
+  const starFade = useTransform(
+    scrollYProgress,
+    [0, 0.52, 0.57],
+    [1, 1, 0.3]
+  );
+
   return (
     <>
       {/* Fixed visual layer — the scene "canvas" */}
-      <div className="fixed inset-0 bg-black pointer-events-none">
+      <motion.div
+        className="fixed inset-0 pointer-events-none"
+        style={{ backgroundColor: bgColor }}
+      >
         {/* Stage 1: Arrow draws in, pulses, then fades */}
         <ArrowIndicator scrollProgress={scrollYProgress} />
 
-        {/* Stars fade in one at a time */}
-        {STARS.map((star, i) => (
-          <Star
-            key={i}
-            scrollProgress={scrollYProgress}
-            x={star.x}
-            y={star.y}
-            size={star.size}
-            enterRange={star.enterRange}
-            layer={star.layer}
-            index={i}
-          />
-        ))}
+        {/* Stars fade in one at a time, fade out during day transition */}
+        <motion.div style={{ opacity: starFade }}>
+          {STARS.map((star, i) => (
+            <Star
+              key={i}
+              scrollProgress={scrollYProgress}
+              x={star.x}
+              y={star.y}
+              size={star.size}
+              enterRange={star.enterRange}
+              layer={star.layer}
+              index={i}
+            />
+          ))}
+        </motion.div>
 
         {/* Moon rises after all stars have settled */}
         <Moon scrollProgress={scrollYProgress} />
 
         {/* Cloud slides in from the right after the moon */}
         <Cloud scrollProgress={scrollYProgress} />
-      </div>
+      </motion.div>
 
       {/* Scroll-height spacer — provides 500vh of room for the timeline */}
-      <div className="h-[3000vh]" aria-hidden="true" />
+      <div className="h-[8000vh]" aria-hidden="true" />
     </>
   );
 }

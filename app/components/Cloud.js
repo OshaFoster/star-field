@@ -9,21 +9,22 @@ import { motion, useTransform } from "framer-motion";
 export default function Cloud({ scrollProgress }) {
   const ease = (t) => t - Math.sin(t * Math.PI * 2) / (Math.PI * 2);
 
-  // Slide from off-screen right all the way to off-screen left (0.62–0.95)
+  // Slide from off-screen right all the way to off-screen left (0.32–0.52)
+  // Starts after moon settles at 0.30
   const startX = 1400;   // off-screen right
   const endX = -2400;    // off-screen left
   const xOffset = useTransform(scrollProgress, (v) => {
-    if (v <= 0.62) return startX;
-    if (v >= 0.95) return endX;
-    const t = (v - 0.62) / 0.33;
+    if (v <= 0.28) return startX;
+    if (v >= 0.48) return endX;
+    const t = (v - 0.28) / 0.20;
     return startX + (endX - startX) * ease(t);
   });
 
   // Stroke fades in quickly at the start
   const strokeOpacity = useTransform(scrollProgress, (v) => {
-    if (v <= 0.62) return 0;
-    if (v >= 0.67) return 1;
-    const t = (v - 0.62) / 0.05;
+    if (v <= 0.28) return 0;
+    if (v >= 0.31) return 1;
+    const t = (v - 0.28) / 0.03;
     return ease(t);
   });
 
